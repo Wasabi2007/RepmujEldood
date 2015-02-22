@@ -34,7 +34,7 @@ module Reomujeldood {
         }
 
         update(){
-            this.game.world.bringToTop(this);
+
             this.keyboard = this.game.input.keyboard;
             this.body.velocity.x = 0;
             if((this.keyboard.isDown(Phaser.Keyboard.UP)|| this.keyboard.isDown(Phaser.Keyboard.W))&& this.jumpCoolDown){
@@ -53,6 +53,9 @@ module Reomujeldood {
                 this.body.data.shapes[0].sensor = false;
 
             }
+
+            this.game.world.wrap(this.body,-100,false,true,false);
+            this.game.world.bringToTop(this);
         }
 
         blockHitBegin(body, shapeA, shapeB, equation){

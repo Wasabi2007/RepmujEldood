@@ -40,6 +40,7 @@ module Reomujeldood {
 
             this.game.camera.follow(this.player);
 
+
         }
     }
 

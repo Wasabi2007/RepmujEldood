@@ -29,7 +29,6 @@ var Reomujeldood;
             this.waitForCollisonEnd = false;
         }
         PlayerFigure.prototype.update = function () {
-            this.game.world.bringToTop(this);
             this.keyboard = this.game.input.keyboard;
             this.body.velocity.x = 0;
             if ((this.keyboard.isDown(Phaser.Keyboard.UP) || this.keyboard.isDown(Phaser.Keyboard.W)) && this.jumpCoolDown) {
@@ -46,6 +45,8 @@ var Reomujeldood;
             if (this.body.velocity.y > 0 && !this.waitForCollisonEnd) {
                 this.body.data.shapes[0].sensor = false;
             }
+            this.game.world.wrap(this.body, -100, false, true, false);
+            this.game.world.bringToTop(this);
         };
         PlayerFigure.prototype.blockHitBegin = function (body, shapeA, shapeB, equation) {
             this.waitForCollisonEnd = true;

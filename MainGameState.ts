@@ -5,11 +5,14 @@
 ///<reference path="build/phaser.d.ts"/>
 ///<reference path="PlayerFigure.ts"/>
 ///<reference path="Paddle.ts"/>
+///<reference path="lib/collections.d.ts"/>
 module Reomujeldood {
     export class MainGameState extends Phaser.State {
         player: PlayerFigure;
 
-        paddle:Phaser.Sprite[];
+        paddle:collections.Queue<Paddle>;
+
+        paddleold:Paddle;
         create(){
             this.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -17,7 +20,7 @@ module Reomujeldood {
             this.world.setBounds(0, 0, 1920, 1920);
 
             this.physics.p2.applyGravity=true;
-            this.physics.p2.gravity.y = 20;
+            this.physics.p2.gravity.y = 200;
             this.physics.p2.setBoundsToWorld(false,false,false,false);
             this.player = new PlayerFigure(this.game,this.world.centerX,this.world.height-100);
 
@@ -29,18 +32,24 @@ module Reomujeldood {
             startGround.body.static = true;
 
             this.game.camera.follow(this.player);
-            this.paddle = new Array();
-            this.paddle.push(this.generatePaddle(this.player.x,this.player.y,0,this.player.jumpStrength,this.player.strifeSpeed,this.player.jumpStrength,this.world.bounds));
+            this.paddle = new collections.Queue<Paddle>();
+            this.paddleold = this.generatePaddle(this.player.body.x,this.player.body.y,0,this.player.jumpStrength*1.5,this.player.strifeSpeed,this.player.jumpStrength*1.5,this.world.bounds);
+            this.paddle.enqueue(this.paddleold );
+
         }
 
         update(){
-            if(this.paddle.length < 3){
-                this.paddle.push(this.generatePaddle(this.paddle[this.paddle.length-1].x+this.player.width*0.5,this.paddle[this.paddle.length-1].y+this.player.height*0.5
-                    ,0,this.player.jumpStrength*0.9
-                    ,this.player.strifeSpeed,this.player.jumpStrength,this.world.bounds));
-            }else if(this.paddle[0].x*this.player.x+this.paddle[0].y*this.player.y>1000*1000 ){
-                this.paddle.pop().destroy();
+            if(this.paddle.size() < 3){
+                this.paddleold = this.generatePaddle(this.paddleold.x+this.player.width*0.5,this.paddleold.y-this.player.height*0.5
+                    ,0,this.player.jumpStrength*0.8*2
+                    ,this.player.strifeSpeed,this.player.jumpStrength*2,this.world.bounds)
+                this.paddle.enqueue(this.paddleold);
+            }else if(this.paddle.peek().y > this.player.y &&(this.paddle.peek().x-this.player.x)*(this.paddle.peek().x-this.player.x)+(this.paddle.peek().y-this.player.y)*(this.paddle.peek().y-this.player.y)>200*200 ){
+                this.paddle.dequeue().destroy();
             }
+
+            //console.log((this.paddle.peek().x-this.paddle.peek().y)*(this.paddle.peek().x-this.paddle.peek().y)+(this.player.x-this.player.y)*(this.player.x-this.player.y));
+            //console.log(400*400);
         }
 
         generatePaddle(x:number, y:number,minXDist:number,minYDist:number,maxXDist:number,maxYDist:number,bounds:Phaser.Rectangle):Paddle{

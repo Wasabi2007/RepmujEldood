@@ -19,7 +19,7 @@ module Reomujeldood {
             this.anchor.setTo(0.5,0);
             this.scale.setTo(0.2,0.2);
             game.add.existing(this);
-            game.physics.p2.enable(this,true);
+            game.physics.p2.enable(this);
 
             this.body.fixedRotation = true;
             //this.body.
@@ -51,10 +51,9 @@ module Reomujeldood {
 
             if(this.body.velocity.y > 0 && !this.waitForCollisonEnd){
                 this.body.data.shapes[0].sensor = false;
-
             }
 
-            this.game.world.wrap(this.body,-100,false,true,false);
+            this.game.world.wrap(this.body);
             this.game.world.bringToTop(this);
         }
 

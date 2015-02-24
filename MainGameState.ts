@@ -48,6 +48,9 @@ module Reomujeldood {
                 this.paddle.dequeue().destroy();
             }
 
+            if(this.player.body.velocity.y > this.game.physics.p2.gravity.y * 2){
+                this.game.camera.follow(null);
+            }
 
             //console.log((this.paddle.peek().x-this.paddle.peek().y)*(this.paddle.peek().x-this.paddle.peek().y)+(this.player.x-this.player.y)*(this.player.x-this.player.y));
             //console.log(400*400);

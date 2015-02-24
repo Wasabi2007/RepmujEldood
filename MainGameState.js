@@ -38,10 +38,10 @@ var Reomujeldood;
         };
         MainGameState.prototype.update = function () {
             if (this.paddle.size() < 3) {
-                this.paddleold = this.generatePaddle(this.paddleold.x + this.player.width * 0.5, this.paddleold.y - this.player.height * 0.5, 0, this.player.jumpStrength * 0.8 * 2, this.player.strifeSpeed, this.player.jumpStrength * 2, this.world.bounds);
+                this.paddleold = this.generatePaddle(this.paddleold.x + this.player.width * 0.5, this.paddleold.y - this.player.height * 0.5, 0, this.player.jumpStrength * 0.8 * 1.5, this.player.strifeSpeed, this.player.jumpStrength * 1.5, this.world.bounds);
                 this.paddle.enqueue(this.paddleold);
             }
-            else if (this.paddle.peek().y > this.player.y && (this.paddle.peek().x - this.player.x) * (this.paddle.peek().x - this.player.x) + (this.paddle.peek().y - this.player.y) * (this.paddle.peek().y - this.player.y) > 200 * 200) {
+            else if ((this.paddleold.y > this.paddle.peek().y || this.paddle.peek().y > this.player.y) && (this.paddle.peek().x - this.player.x) * (this.paddle.peek().x - this.player.x) + (this.paddle.peek().y - this.player.y) * (this.paddle.peek().y - this.player.y) > 500 * 500) {
                 this.paddle.dequeue().destroy();
             }
             //console.log((this.paddle.peek().x-this.paddle.peek().y)*(this.paddle.peek().x-this.paddle.peek().y)+(this.player.x-this.player.y)*(this.player.x-this.player.y));

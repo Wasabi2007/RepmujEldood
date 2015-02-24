@@ -26,13 +26,14 @@ var Reomujeldood;
             this.jumpStrength = 150;
             this.jumpCoolDown = true;
             this.strifeSpeed = 100;
+            this.timeToZeniet = 2;
             this.waitForCollisonEnd = false;
         }
         PlayerFigure.prototype.update = function () {
             this.keyboard = this.game.input.keyboard;
             this.body.velocity.x = 0;
             if ((this.keyboard.isDown(Phaser.Keyboard.UP) || this.keyboard.isDown(Phaser.Keyboard.W)) && this.jumpCoolDown) {
-                this.body.moveUp(this.jumpStrength);
+                this.body.velocity.y = -(this.jumpStrength / this.timeToZeniet + this.game.physics.p2.gravity.y * this.timeToZeniet);
                 this.jumpCoolDown = false;
                 this.body.data.shapes[0].sensor = true;
             }
